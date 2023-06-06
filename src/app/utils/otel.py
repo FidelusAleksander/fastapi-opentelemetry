@@ -24,7 +24,7 @@ def instrument_opentelemetry(app: FastAPI) -> None:
     trace.set_tracer_provider(tracer_provider)
 
     span_processor = get_span_processor(otlp_exporter)
-    tracer_provider.add_span_processor(span_processor)
+    trace.get_tracer_provider().add_span_processor(span_processor)
 
     FastAPIInstrumentor.instrument_app(app=app)
 
