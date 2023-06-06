@@ -1,28 +1,16 @@
 import fastapi
-import httpx
 from app.utils.otel import instrument_opentelemetry
-import uvicorn
-
-app = fastapi.FastAPI()
-instrument_opentelemetry(app)
+from app.router import api
 
 
-@app.get("/")
-async def home():
-    return {"message": "FastApi Home"}
+def create_app() -> fastapi.FastAPI:
+    app = fastapi.FastAPI()
+    instrument_opentelemetry(app)
 
-
-@app.get("/foobar")
-async def foobar():
-    return {"message": "hello world"}
-
-
-@app.get('/call-google')
-def call_google():
-    with httpx.Client() as client:
-        response = client.get("https://www.google.com")
-    return response.status_code
+    app.include_router(api)
+    return app
 
 
 if __name__ == "__main__":
-    uvicorn.run(app)
+    import uvicorn
+    uvicorn.run(create_app())
