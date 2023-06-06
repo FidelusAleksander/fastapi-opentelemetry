@@ -6,12 +6,12 @@ from unittest.mock import patch
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 
 @pytest.fixture
-def client():
+def client(otel_exporter):
     from app.main import app
     yield TestClient(app)
 
 
-@pytest.fixture(scope="session") # SCOPE this to function?
+@pytest.fixture
 def otel_exporter():
     exporter = InMemorySpanExporter()
     processor = SimpleSpanProcessor(exporter)
