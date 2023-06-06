@@ -9,3 +9,8 @@ def create_app() -> fastapi.FastAPI:
 
     app.include_router(api)
     return app
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(create_app())
